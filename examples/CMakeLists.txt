@@ -29,3 +29,8 @@ TARGET_LINK_LIBRARIES(file_dialog_test hand_utils)
 
 ADD_EXECUTABLE(ogre_rendering_test ogre_rendering_test.cc)
 TARGET_LINK_LIBRARIES(ogre_rendering_test ${LibHand_LIBRARIES})
+
+ADD_EXECUTABLE(generate_dataset generate_dataset.cc)
+TARGET_LINK_LIBRARIES(generate_dataset ${LibHand_LIBRARIES})
+
+

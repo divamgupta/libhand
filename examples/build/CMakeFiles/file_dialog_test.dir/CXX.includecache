@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/iiitd/libhand/examples/file_dialog_test.cc
+iostream
+-
+file_dialog.h
+/home/iiitd/libhand/examples/file_dialog.h
+
+/home/iiitd/libhand/hand_cpp/source/file_dialog.h
+string
+-
+vector
+-
+hand_prereq.h
+/home/iiitd/libhand/hand_cpp/source/hand_prereq.h
+
+/home/iiitd/libhand/hand_cpp/source/hand_prereq.h
+

@@ -1,0 +1,9 @@
+/home/iiitd/libhand/dist/libhand_hog.so
+/home/iiitd/libhand/dist/libhand_renderer.so
+/home/iiitd/libhand/dist/libhand_utils.so
+/home/iiitd/libhand/dist/LibHand-export.cmake
+/home/iiitd/libhand/dist/LibHand-export-noconfig.cmake
+/home/iiitd/libhand/dist/LibHandConfig.cmake
+/home/iiitd/libhand/dist/FindLibHand.cmake
+/home/iiitd/libhand/dist/libdot_sceneloader.a
+/home/iiitd/libhand/dist/libtinyxml.a
