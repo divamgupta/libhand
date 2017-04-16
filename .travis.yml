@@ -1,0 +1,126 @@
+language: cpp
+
+# Travis Continuous Integration Build Matrix allows different OS/package/compiler versions to be specified
+# Unfortunately, common packages cannot be specified separately, and multidimentional matrix are not yet
+# supported, leading to a lot of duplication in the matrix section below.
+
+matrix:
+  include:
+    # Ubuntu 12.04 Precise build with GCC
+    - os: linux
+      dist: precise
+      sudo: required
+      compiler: gcc
+      env:
+        - OGRE_HOME=/usr/lib/x86_64-linux-gnu/OGRE-1.7.4
+      addons:
+        apt:
+          packages:
+            - libogre-dev
+            - libboost-system-dev
+            - libglu1-mesa-dev
+            - libxt-dev
+            - libopencv-dev
+            - tcl
+            - tk
+            - libboost-system-dev
+            - libboost-filesystem-dev
+    # Ubuntu 12.04 Precise build with Clang
+    - os: linux
+      dist: precise
+      sudo: required
+      compiler: clang
+      env:
+        - OGRE_HOME=/usr/lib/x86_64-linux-gnu/OGRE-1.7.4
+      addons:
+        apt:
+          packages:
+            - libogre-dev
+            - libboost-system-dev
+            - libglu1-mesa-dev
+            - libxt-dev
+            - libopencv-dev
+            - tcl
+            - tk
+            - libboost-system-dev
+            - libboost-filesystem-dev
+    # Ubuntu 14.04 Trusty build with GCC
+    - os: linux
+      dist: trusty
+      compiler: gcc
+      sudo: required
+      env:
+        - OGRE_HOME=/usr/lib/x86_64-linux-gnu/OGRE-1.9.0
+      addons:
+        apt:
+          packages:
+            - libogre-1.9-dev
+            - libboost-system-dev
+            - libglu1-mesa-dev
+            - libxt-dev
+            - libopencv-dev
+            - tcl
+            - tk
+            - libboost-system-dev
+            - libboost-filesystem-dev
+    # Ubuntu 14.04 Trusty build with Clang
+    - os: linux
+      dist: trusty
+      compiler: clang
+      sudo: required
+      env:
+        - OGRE_HOME=/usr/lib/x86_64-linux-gnu/OGRE-1.9.0
+      addons:
+        apt:
+          packages:
+            - libogre-1.9-dev
+            - libboost-system-dev
+            - libglu1-mesa-dev
+            - libxt-dev
+            - libopencv-dev
+            - tcl
+            - tk
+            - libboost-system-dev
+            - libboost-filesystem-dev
+    # macOS
+    - os: osx
+      osx_image: xcode8.2
+      compiler: cmake
+      sudo: required
+      before_install:
+        - brew update
+        - brew tap homebrew/science
+        - brew tap osrf/simulation
+        - brew update
+        # brew is already installed, but can install this version, first `brew unlink boost`
+        # uninstall numpy so that brew will not complain
+        - /usr/bin/yes | pip uninstall numpy
+        - brew install opencv
+        - travis_wait brew install ogre
+
+# Setup a X Virtual Framebuffer to allow opening of X display
+before_script:
+  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; sleep 3;  fi"
+
+script:
+  - mkdir build
+  - pushd build
+  - cmake ..
+    # No unit tests yet
+  - make
+    # Collate libhand build artifacts into local "dist" directory (for external applications to link against)
+  - make install
+  - popd
+ 
+    # Build examples
+  - pushd examples
+  - mkdir build
+  - pushd build
+  - cmake ..
+  - make
+  - popd
+  - popd
+    # Setup runtime link paths (see BUILD.DEBIAN.md)
+  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${OGRE_HOME}; sudo ldconfig; fi"
+    # Run LibHand integration test (only on linux, macos on travis doesn't seem to support xvfb)
+  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then ./examples/build/ogre_rendering_test .; fi"
